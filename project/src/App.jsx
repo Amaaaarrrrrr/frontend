@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import HomePage from './pages/HomePage';
-import RegisterPage from './pages/RegisterPage'; // Import RegisterPage
+import RegisterPage from './pages/RegisterPage';
 import StudentDashboard from './pages/student/StudentDashboard';
 import StudentCourses from './pages/student/StudentCourses';
 import UnitRegistration from './pages/student/UnitRegistration';
@@ -11,7 +11,7 @@ import StudentFees from './pages/student/StudentFees';
 import StudentHostel from './pages/student/StudentHostel';
 import DocumentSubmission from './pages/student/DocumentSubmission';
 import StudentAuth from './pages/student/StudentAuth';
-import LecturerDashboard from './pages/lecturer/LecturerDashboard';
+import LecturerDashboard from './pages/lecturer/LecturerDashboard'; // ✅ removed duplicate
 import LecturerCourses from './pages/lecturer/LecturerCourses';
 import GradesSubmission from './pages/lecturer/GradesSubmission';
 import LecturerAnnouncements from './pages/lecturer/LecturerAnnouncements';
@@ -28,6 +28,7 @@ import FeeClearanceStatus from './pages/admin/FeeClearanceStatus';
 import AdminAuth from './pages/admin/AdminAuth';
 import CoursePage from './pages/CoursePage';
 import UnitRegistrationForm from './forms/UnitRegistrationForm';
+
 // Layout components
 import StudentLayout from './layouts/StudentLayout';
 import LecturerLayout from './layouts/LecturerLayout';
@@ -35,6 +36,9 @@ import AdminLayout from './layouts/AdminLayout';
 
 // Login page
 import LoginPage from './pages/LoginPage';
+
+// Optional: 404 component
+const NotFoundPage = () => <div>404 - Page Not Found</div>;
 
 function App() {
   return (
@@ -44,10 +48,9 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} /> 
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/courses" element={<CoursePage />} />
           <Route path="/registration" element={<UnitRegistrationForm />} />
-        
 
           {/* Student routes */}
           <Route
@@ -105,7 +108,7 @@ function App() {
           </Route>
 
           {/* Fallback route */}
-          <Route path="*" element={<div>404 - Page Not Found</div>} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
     </AuthProvider>
