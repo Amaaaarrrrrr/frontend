@@ -52,7 +52,7 @@ const HomePage = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
-              <a href="#courses" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
+              <a href="/courses" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 Courses
               </a>
               <a href="#features" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
@@ -88,7 +88,7 @@ const HomePage = () => {
           <div className="md:hidden bg-white border-t border-gray-200 py-2">
             <div className="container mx-auto px-4">
               <nav className="flex flex-col space-y-2">
-                <a href="#courses" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium" onClick={toggleMenu}>
+                <a href="/courses" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium" onClick={toggleMenu}>
                   Courses
                 </a>
                 <a href="#features" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium" onClick={toggleMenu}>
@@ -131,7 +131,7 @@ const HomePage = () => {
                     Log in to Portal
                   </Button>
                 </Link>
-                <a href="#courses">
+                <a href="/courses">
                   <Button variant="secondary" className="bg-blue-700 hover:bg-blue-800">
                     Explore Courses
                   </Button>
@@ -197,8 +197,8 @@ const HomePage = () => {
                       </div>
                     </div>
                     <p className="text-gray-600 flex-grow mb-4">{course.description}</p>
-                    <Link to="/login" className="text-blue-600 flex items-center text-sm font-medium">
-                      Learn more <ChevronsRight className="h-4 w-4 ml-1" />
+                    <Link to="/registration" className="text-blue-600 flex items-center text-sm font-medium">
+                      register <ChevronsRight className="h-4 w-4 ml-1" />
                     </Link>
                   </div>
                 </Card>

@@ -26,7 +26,8 @@ import LecturerAssignment from './pages/admin/LecturerAssignment';
 import StudentRegistrationApproval from './pages/admin/StudentRegistrationApproval';
 import FeeClearanceStatus from './pages/admin/FeeClearanceStatus';
 import AdminAuth from './pages/admin/AdminAuth';
-
+import CoursePage from './pages/CoursePage';
+import UnitRegistrationForm from './forms/UnitRegistrationForm';
 // Layout components
 import StudentLayout from './layouts/StudentLayout';
 import LecturerLayout from './layouts/LecturerLayout';
@@ -44,6 +45,9 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} /> 
+          <Route path="/courses" element={<CoursePage />} />
+          <Route path="/registration" element={<UnitRegistrationForm />} />
+        
 
           {/* Student routes */}
           <Route
