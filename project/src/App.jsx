@@ -1,16 +1,16 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage'; // Import RegisterPage
 import StudentDashboard from './pages/student/StudentDashboard';
-import StudentCourses from './pages/student/StudentCourses';
+import Courses from './pages/student/Courses';
 import UnitRegistration from './pages/student/UnitRegistration';
 import StudentFees from './pages/student/StudentFees';
 import StudentHostel from './pages/student/StudentHostel';
 import DocumentSubmission from './pages/student/DocumentSubmission';
-import StudentAuth from './pages/student/StudentAuth';
+import Profile from './pages/student/StudentAuth';
 import LecturerDashboard from './pages/lecturer/LecturerDashboard';
 import LecturerCourses from './pages/lecturer/LecturerCourses';
 import GradesSubmission from './pages/lecturer/GradesSubmission';
@@ -59,12 +59,12 @@ function App() {
             }
           >
             <Route path="dashboard" element={<StudentDashboard />} />
-            <Route path="courses" element={<StudentCourses />} />
+            <Route path="courses" element={<Courses />} />
             <Route path="register-units" element={<UnitRegistration />} />
             <Route path="fees" element={<StudentFees />} />
             <Route path="hostel" element={<StudentHostel />} />
             <Route path="documents" element={<DocumentSubmission />} />
-            <Route path="auth" element={<StudentAuth />} />
+            <Route path="auth" element={<Profile />} />
           </Route>
 
           {/* Lecturer routes */}
