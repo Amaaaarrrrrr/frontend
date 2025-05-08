@@ -84,9 +84,6 @@ function App() {
             <Route path="auth" element={<LecturerAuth />} />
           </Route>
 
-          {/* Redirect from /admin_dashboard to /admin/dashboard */}
-          <Route path="/admin_dashboard" element={<Navigate to="/admin/dashboard" replace />} />
-
           {/* Admin routes */}
           <Route
             path="/admin/*"
