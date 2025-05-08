@@ -31,20 +31,12 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        const { access_token, user } = data;
+        const { access_token, user, redirect_url } = data;
         localStorage.setItem('access_token', access_token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        //  using user.role from backend to navigate
-        if (user.role === 'lecturer') {
-          navigate('/lecturer/dashboard');
-        } else if (user.role === 'student') {
-          navigate('/student/dashboard');
-        } else if (user.role === 'admin') {
-          navigate('/admin/dashboard');
-        } else {
-          navigate('/');
-        }
+        // ✅ Backend decides the redirect path
+        navigate(redirect_url);
       } else {
         setError(data.error || 'Invalid email or password. Please try again.');
       }

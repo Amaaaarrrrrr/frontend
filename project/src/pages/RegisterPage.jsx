@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
 import { GraduationCap, Mail, Lock, AlertCircle, User, Phone, BookOpen } from 'lucide-react';
 import axios from 'axios';
+import Input from '../components/common/Input';
+import Button from '../components/common/Button';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -40,19 +39,12 @@ const RegisterPage = () => {
       const response = await axios.post('http://127.0.0.1:5000/api/register', dataToSubmit);
 
       if (response.status === 201) {
-        // After successful registration, login the user
-        const loginResponse = await axios.post('http://127.0.0.1:5000/api/login', {
-          email,
-          password,
-        });
-
-        if (loginResponse.status === 200) {
-          localStorage.setItem('token', loginResponse.data.access_token);
-          navigate(loginResponse.data.redirect_url);
-        }
+        // Redirect to login page after successful registration
+        navigate('/login');
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Error occurred during registration. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -80,85 +72,70 @@ const RegisterPage = () => {
             )}
 
             <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <Input
-                  label="Full Name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Enter your full name"
-                  required
-                  icon={<User className="h-5 w-5 text-gray-400" />}
-                />
-              </div>
+              <Input
+                label="Full Name"
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your full name"
+                required
+                icon={<User className="h-5 w-5 text-gray-400" />}
+              />
 
-              <div className="mb-4">
-                <Input
-                  label="Email Address"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  icon={<Mail className="h-5 w-5 text-gray-400" />}
-                />
-              </div>
+              <Input
+                label="Email Address"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                icon={<Mail className="h-5 w-5 text-gray-400" />}
+              />
 
-              <div className="mb-4">
-                <Input
-                  label="Password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  required
-                  icon={<Lock className="h-5 w-5 text-gray-400" />}
-                />
-              </div>
+              <Input
+                label="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+                icon={<Lock className="h-5 w-5 text-gray-400" />}
+              />
 
-              <div className="mb-6">
-                <Input
-                  label="Confirm Password"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Confirm your password"
-                  required
-                  icon={<Lock className="h-5 w-5 text-gray-400" />}
-                />
-              </div>
+              <Input
+                label="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Confirm your password"
+                required
+                icon={<Lock className="h-5 w-5 text-gray-400" />}
+              />
 
               {/* Role selection */}
-              <div className="mb-5">
+              <div className="my-5">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Register as</label>
                 <div className="grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setRole('student')}
-                    className={`p-3 rounded-lg border transition-colors ${role === 'student' ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    Student
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole('lecturer')}
-                    className={`p-3 rounded-lg border transition-colors ${role === 'lecturer' ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    Lecturer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole('admin')}
-                    className={`p-3 rounded-lg border transition-colors ${role === 'admin' ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    Admin
-                  </button>
+                  {['student', 'lecturer', 'admin'].map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRole(r)}
+                      className={`p-3 rounded-lg border transition-colors ${
+                        role === r
+                          ? 'bg-blue-50 border-blue-300 text-blue-700'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {r.charAt(0).toUpperCase() + r.slice(1)}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {/* Role-specific profile fields */}
               {role === 'student' && (
-                <div className="mb-4">
+                <>
                   <Input
                     label="Registration Number"
                     type="text"
@@ -169,10 +146,6 @@ const RegisterPage = () => {
                     required
                     icon={<BookOpen className="h-5 w-5 text-gray-400" />}
                   />
-                </div>
-              )}
-              {role === 'student' && (
-                <div className="mb-4">
                   <Input
                     label="Program"
                     type="text"
@@ -182,10 +155,6 @@ const RegisterPage = () => {
                     placeholder="Enter your program"
                     required
                   />
-                </div>
-              )}
-              {role === 'student' && (
-                <div className="mb-4">
                   <Input
                     label="Year of Study"
                     type="text"
@@ -195,10 +164,6 @@ const RegisterPage = () => {
                     placeholder="Enter your year of study"
                     required
                   />
-                </div>
-              )}
-              {role === 'student' && (
-                <div className="mb-4">
                   <Input
                     label="Phone Number"
                     type="text"
@@ -207,12 +172,13 @@ const RegisterPage = () => {
                     onChange={handleProfileInputChange}
                     placeholder="Enter your phone number"
                     required
+                    icon={<Phone className="h-5 w-5 text-gray-400" />}
                   />
-                </div>
+                </>
               )}
 
               {role === 'lecturer' && (
-                <div className="mb-4">
+                <>
                   <Input
                     label="Staff Number"
                     type="text"
@@ -222,10 +188,6 @@ const RegisterPage = () => {
                     placeholder="Enter your staff number"
                     required
                   />
-                </div>
-              )}
-              {role === 'lecturer' && (
-                <div className="mb-4">
                   <Input
                     label="Department"
                     type="text"
@@ -235,10 +197,6 @@ const RegisterPage = () => {
                     placeholder="Enter your department"
                     required
                   />
-                </div>
-              )}
-              {role === 'lecturer' && (
-                <div className="mb-4">
                   <Input
                     label="Phone Number"
                     type="text"
@@ -247,11 +205,12 @@ const RegisterPage = () => {
                     onChange={handleProfileInputChange}
                     placeholder="Enter your phone number"
                     required
+                    icon={<Phone className="h-5 w-5 text-gray-400" />}
                   />
-                </div>
+                </>
               )}
 
-              <Button type="submit" variant="primary" fullWidth disabled={isLoading} className="py-3">
+              <Button type="submit" variant="primary" fullWidth disabled={isLoading} className="py-3 mt-4">
                 {isLoading ? (
                   <span className="flex items-center justify-center">
                     <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
