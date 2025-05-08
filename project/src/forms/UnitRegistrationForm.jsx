@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Loader } from 'lucide-react';
 
-const UnitRegistrationForm = () => {
+const UnitRegistrationForm= () => {
   const [courseCode, setCourseCode] = useState('');
   const [semesterId, setSemesterId] = useState('');
   const [courses, setCourses] = useState([]);
@@ -34,12 +34,29 @@ const UnitRegistrationForm = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     try {
-      const response = await axios.post('http://127.0.0.1:5000/api/registration', {
-        course_code: courseCode,
-        semester_id: semesterId,
-      });
+      // Get the token from localStorage (or wherever it's stored)
+      const token = localStorage.getItem('accessToken');
+      
+      if (!token) {
+        setError('User is not logged in');
+        return;
+      }
+  
+      const response = await axios.post(
+        'http://127.0.0.1:5000/api/registration', 
+        {
+          course_code: courseCode,
+          semester_id: semesterId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Send token in Authorization header
+          },
+        }
+      );
+      
       toast.success('Registration successful!');
       setCourseCode('');
       setSemesterId('');
@@ -50,6 +67,7 @@ const UnitRegistrationForm = () => {
       setLoading(false);
     }
   };
+  
 
   const handleDeleteRegistration = async (registrationId) => {
     try {
