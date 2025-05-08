@@ -5,7 +5,7 @@ import { BookOpen, FileText, ClipboardList, Speaker, User, Home } from 'lucide-r
 function LecturerDashboard() {
   const dashboardItems = [
     { title: 'My Courses', path: '/lecturer/courses', icon: <BookOpen size={24} /> },
-    { title: 'Submit Grades', path: '/lecturer/submit-grades', icon: <FileText size={24} /> },
+    { title: 'Submit Grades', path: '/lecturer/grades', icon: <FileText size={24} /> },
     { title: 'Assignments', path: '/lecturer/assignments', icon: <ClipboardList size={24} /> },
     { title: 'Announcements', path: '/lecturer/announcements', icon: <Speaker size={24} /> },
     { title: 'Account Settings', path: '/lecturer/account', icon: <User size={24} /> },

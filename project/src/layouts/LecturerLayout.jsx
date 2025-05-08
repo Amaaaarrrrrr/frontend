@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import SidebarLink from '../components/common/SidebarLink';
 import { useAuth } from '../contexts/AuthContext';
+import axios from 'axios'; // ✅ Added import
 import {
   BookOpen,
   GraduationCap,
@@ -18,41 +19,44 @@ import {
 const LecturerLayout = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [loading, setLoading] = useState(false); // moved inside component
+  const [courses, setCourses] = useState([]); // added
+  const [filteredCourses, setFilteredCourses] = useState([]); // added
+  const [programs, setPrograms] = useState([]); // ✅ added
+  const [error, setError] = useState(null); // ✅ added
 
   useEffect(() => {
     const fetchCourses = async () => {
-      setLoading(true); // Set loading to true before fetching
+      setLoading(true);
       try {
         const response = await axios.get('http://127.0.0.1:5000/api/courses');
         const courseData = response.data || [];
-        setCourses(courseData); // Update courses state
-        setFilteredCourses(courseData); // Update filtered courses state
-    
+        setCourses(courseData);
+        setFilteredCourses(courseData);
         const uniquePrograms = [
-          ...new Set(courseData.map((course) => course.program).filter(Boolean)),
+          ...new Set(courseData.map((course) => course.program).filter(Boolean))
         ];
-        setPrograms(uniquePrograms); // Update programs state
+        setPrograms(uniquePrograms);
       } catch (err) {
-        setError('Failed to load courses. Please try again later.'); // Update error state
+        setError('Failed to load courses. Please try again later.');
       } finally {
-        setLoading(false); // Set loading to false once fetch is done
+        setLoading(false);
       }
     };
-  
+
     fetchCourses();
-  
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-  
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? 'hidden' : '';
   }, [isMobileMenuOpen]);
@@ -139,7 +143,7 @@ const LecturerLayout = () => {
         <div className="flex flex-col justify-between h-full p-4 overflow-y-auto">
           <div className="space-y-1">
             <SidebarLink to="/lecturer/dashboard" icon={<Gauge size={20} />} text="Dashboard" />
-            <SidebarLink to="axios.Get/api/courses" icon={<BookOpen size={20} />} text="My Courses" />
+            <SidebarLink to="/lecturer/courses" icon={<BookOpen size={20} />} text="My Courses" /> {/* ✅ fixed */}
             <SidebarLink to="/lecturer/grades" icon={<ClipboardList size={20} />} text="Grade Submission" />
             <SidebarLink to="/lecturer/announcements" icon={<MessageSquare size={20} />} text="Announcements" />
             <SidebarLink to="/lecturer/assignments" icon={<FileText size={20} />} text="Assignments" />
@@ -191,7 +195,12 @@ const LecturerLayout = () => {
 
         {/* Main content area */}
         <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
-          <Outlet />
+          {error && <div className="text-red-500 mb-4">{error}</div>}
+          {loading ? (
+            <div className="text-center text-gray-500">Loading courses...</div>
+          ) : (
+            <Outlet />
+          )}
         </main>
       </div>
     </div>

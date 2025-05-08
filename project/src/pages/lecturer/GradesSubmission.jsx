@@ -9,21 +9,21 @@ function GradesSubmission() {
     student_id: '',
     course_id: '',
     semester_id: '',
-    grade: '',
+    grade: ''
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  const token = localStorage.getItem('token'); // JWT token stored in localStorage
+  const token = localStorage.getItem('token'); // JWT to
 
   // Fetch dropdown data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [studentsRes, coursesRes, semestersRes] = await Promise.all([
-          axios.get('/api/students', { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get('/api/courses', { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get('/api/semesters', { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get('http://127.0.0.1:5000/api/students', { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get('/http://127.0.0.1:5000/api/courses', { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get('/http://127.0.0.1:5000/api/semesters', { headers: { Authorization: `Bearer ${token}` } }),
         ]);
         setStudents(studentsRes.data);
         setCourses(coursesRes.data);
@@ -31,7 +31,7 @@ function GradesSubmission() {
         setLoading(false);
       } catch (err) {
         console.error('Error fetching data:', err);
-        alert('Failed to load data.');
+        ('Failed to load data.');
         setLoading(false);
       }
     };
@@ -54,7 +54,7 @@ function GradesSubmission() {
 
     try {
       await axios.post(
-        '/api/grades',
+        'http://127.0.0.1:5000/api/grades',
         formData, // send as JSON
         { headers: { Authorization: `Bearer ${token}` } }
       );
