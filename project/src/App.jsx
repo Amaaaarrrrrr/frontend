@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import HomePage from './pages/HomePage';
@@ -83,6 +83,9 @@ function App() {
             <Route path="assignments" element={<Assignments />} />
             <Route path="auth" element={<LecturerAuth />} />
           </Route>
+
+          {/* Redirect from /admin_dashboard to /admin/dashboard */}
+          <Route path="/admin_dashboard" element={<Navigate to="/admin/dashboard" replace />} />
 
           {/* Admin routes */}
           <Route
