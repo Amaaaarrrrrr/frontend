@@ -25,16 +25,29 @@ const LecturerAnnouncements = () => {
   }, []);
 
   return (
-    <div>
-      <h2>Announcements</h2>
+    <div className="p-6 max-w-4xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4">Announcements</h2>
+
       {loading ? (
-        <p>Loading announcements...</p>
+        <p className="text-gray-600">Loading announcements...</p>
+      ) : announcements.length === 0 ? (
+        <p className="text-gray-500">No announcements available.</p>
       ) : (
-        <ul>
-          {announcements.map((announcement) => (
-            <li key={announcement.id}>{announcement.title}</li>
+        <div className="space-y-4">
+          {announcements.map((announcement, index) => (
+            <div
+              key={announcement.id || index}
+              className="bg-white shadow rounded-lg p-4 border border-gray-200"
+            >
+              <h3 className="text-lg font-semibold text-gray-800">{announcement.title}</h3>
+              <p className="text-gray-700 mt-1">{announcement.content}</p>
+              <div className="text-sm text-gray-500 mt-2">
+                Posted by <span className="font-medium">{announcement.posted_by}</span> on{' '}
+                {new Date(announcement.date_posted).toLocaleDateString()}
+              </div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

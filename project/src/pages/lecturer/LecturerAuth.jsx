@@ -10,9 +10,10 @@ function LecturerAuth() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  // Fetch profile data when component mounts
   useEffect(() => {
     axios
-      .get('/api/profile', {
+      .get('http://127.0.0.1:5000/api/profile', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
       .then((response) => {
@@ -26,11 +27,13 @@ function LecturerAuth() {
       });
   }, []);
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle form submission to update profile
   const handleSubmit = (e) => {
     e.preventDefault();
     setSaving(true);
@@ -38,7 +41,7 @@ function LecturerAuth() {
 
     axios
       .put(
-        '/api/profile',
+        'http://127.0.0.1:5000/api/profile',
         { ...profile, password: password || undefined },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       )
@@ -50,18 +53,20 @@ function LecturerAuth() {
       .finally(() => setSaving(false));
   };
 
+  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
 
+  // Handle account deletion
   const handleDelete = () => {
     if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       return;
     }
 
     axios
-      .delete('/api/profile', {
+      .delete('http://127.0.0.1:5000/api/profile', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       })
       .then(() => {
@@ -75,6 +80,7 @@ function LecturerAuth() {
       });
   };
 
+  // Loading state handling
   if (loading) return <p className="p-6">Loading account settings...</p>;
 
   return (
