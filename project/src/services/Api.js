@@ -1,67 +1,78 @@
+// Api.js
+
 import axios from 'axios';
 
-// Create axios instance with default config
-export const api = axios.create({
+// ✅ Create Axios instance
+const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor for adding the auth token
+// ✅ Attach token to requests
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor for handling common errors
+// ✅ Handle 401 errors globally
 api.interceptors.response.use(
-  (response) => {
-    return response;
-  },
+  (response) => response,
   (error) => {
-    // Handle 401 Unauthorized errors
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('token');
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
       window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
 
-// Create API service functions for different endpoints
-export const courseService = {
-  getAllCourses: () => api.get('/api/courses'),
-  getCourseById: (id: string) => api.get(`/api/courses/${id}`),
+// ✅ Auth Service
+export const authService = {
+  login: (credentials) => api.post('/api/login', credentials),
+  register: (data) => api.post('/api/register', data),
+  getProfile: () => api.get('/api/profile'),
 };
 
+// ✅ Student Service
 export const studentService = {
   getProfile: () => api.get('/api/profile'),
-  registerUnits: (data: any) => api.post('/api/registration', data),
+  registerUnits: (data) => api.post('/api/registration', data),
   getFees: () => api.get('/api/payments'),
   getFeeStructure: () => api.get('/api/fee-structure'),
   getClearanceStatus: () => api.get('/api/clearance'),
 };
 
+// ✅ Lecturer Service
 export const lecturerService = {
   getCourses: () => api.get('/api/courses'),
-  submitGrades: (data: any) => api.post('/api/grades', data),
-  getGrades: (courseId: string) => api.get(`/api/grades?courseId=${courseId}`),
-  createAnnouncement: (data: any) => api.post('/api/announcements', data),
+  submitGrades: (data) => api.post('/api/grades', data),
+  getGrades: (courseId) => api.get(`/api/grades?courseId=${courseId}`),
+  createAnnouncement: (data) => api.post('/api/announcements', data),
 };
 
+// ✅ Admin Service
 export const adminService = {
   getDashboardStats: () => api.get('/api/admin_dashboard'),
   getAllUsers: () => api.get('/api/users'),
-  createUser: (data: any) => api.post('/api/register', data),
-  manageFees: (data: any) => api.post('/api/fee-structure', data),
-  assignLecturers: (data: any) => api.post('/admin/assign_lecturer', data),
+  createUser: (data) => api.post('/api/register', data),
+  manageFees: (data) => api.post('/api/fee-structure', data),
+  assignLecturers: (data) => api.post('/admin/assign_lecturer', data),
 };
+
+// ✅ Course Service (shared)
+export const courseService = {
+  getAllCourses: () => api.get('/api/courses'),
+  getCourseById: (id) => api.get(`/api/courses/${id}`),
+};
+
+// ✅ Export the Axios instance (optional)
+export default api;
