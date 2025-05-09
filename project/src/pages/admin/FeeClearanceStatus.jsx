@@ -59,7 +59,6 @@ const FeeClearanceStatus = () => {
 };
 
 export default FeeClearanceStatus;
-<<<<<<< HEAD
 
 
 
@@ -819,5 +818,3 @@ export default FeeClearanceStatus;
 
 
 
-=======
->>>>>>> 83fafbbf366acda14318c843712b6255be9990d4
