@@ -39,7 +39,6 @@ const RegisterPage = () => {
       const response = await axios.post('http://127.0.0.1:5000/api/register', dataToSubmit);
 
       if (response.status === 201) {
-        // Redirect to login page after successful registration
         navigate('/login');
       }
     } catch (err) {
@@ -112,11 +111,11 @@ const RegisterPage = () => {
                 icon={<Lock className="h-5 w-5 text-gray-400" />}
               />
 
-              {/* Role selection */}
+              {/* Role selection without admin */}
               <div className="my-5">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Register as</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['student', 'lecturer', 'admin'].map((r) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {['student', 'lecturer'].map((r) => (
                     <button
                       key={r}
                       type="button"
