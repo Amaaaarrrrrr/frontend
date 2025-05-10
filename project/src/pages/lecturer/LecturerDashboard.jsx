@@ -20,24 +20,9 @@ function LecturerDashboard() {
           <span className="text-lg font-bold">Lecturer Portal</span>
         </div>
         <div className="flex gap-4">
-          <Link to="/lecturer" className="hover:underline">
-            Dashboard
-          </Link>
-          <Link to="/lecturer/courses" className="hover:underline">
-            My Courses
-          </Link>
-          <Link to="/lecturer/submit-grades" className="hover:underline">
-            Submit Grades
-          </Link>
-          <Link to="/lecturer/assignments" className="hover:underline">
-            Assignments
-          </Link>
-          <Link to="/lecturer/announcements" className="hover:underline">
-            Announcements
-          </Link>
-          <Link to="/lecturer/account" className="hover:underline">
-            Account
-          </Link>
+          <p>Plan your Classes that can run for 90 days per Semester</p>
+          <p>Lecturer should adare to code of conducts and policies of the University</p>
+          
         </div>
       </nav>
 

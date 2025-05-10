@@ -2,8 +2,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-const ProtectedRoute = ({ children, allowedRole }) => {
-  const { user, loading, isAuthenticated } = useAuth();
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const { user, loading } = useAuth();
 
   if (loading) {
     return (
@@ -13,21 +13,27 @@ const ProtectedRoute = ({ children, allowedRole }) => {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" />;
+  // Redirect unauthenticated users to login
+  if (!user) {
+    return <Navigate to="/login" replace />;
   }
 
-  if (user?.role !== allowedRole) {
-    if (user?.role === 'student') {
-      return <Navigate to="/student/dashboard" />;
-    } else if (user?.role === 'lecturer') {
-      return <Navigate to="/lecturer/dashboard" />;
-    } else if (user?.role === 'admin') {
-      return <Navigate to="/admin/dashboard" />;
+  // Check if user has required role
+  if (!allowedRoles.includes(user.role)) {
+    // Redirect to role-specific dashboard if user has different role
+    switch(user.role) {
+      case 'student':
+        return <Navigate to="/student/dashboard" replace />;
+      case 'lecturer':
+        return <Navigate to="/lecturer/dashboard" replace />;
+      case 'admin':
+        return <Navigate to="/admin/dashboard" replace />;
+      default:
+        return <Navigate to="/login" replace />;
     }
   }
 
-  return <>{children}</>;
+  return children;
 };
 
 export default ProtectedRoute;

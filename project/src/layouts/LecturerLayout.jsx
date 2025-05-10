@@ -143,7 +143,7 @@ const LecturerLayout = () => {
         <div className="flex flex-col justify-between h-full p-4 overflow-y-auto">
           <div className="space-y-1">
             <SidebarLink to="/lecturer/dashboard" icon={<Gauge size={20} />} text="Dashboard" />
-            <SidebarLink to="/lecturer/courses" icon={<BookOpen size={20} />} text="My Courses" /> {/* ✅ fixed */}
+            <SidebarLink to="/lecturer/courses" icon={<BookOpen size={20} />} text="My Courses" />
             <SidebarLink to="/lecturer/grades" icon={<ClipboardList size={20} />} text="Grade Submission" />
             <SidebarLink to="/lecturer/announcements" icon={<MessageSquare size={20} />} text="Announcements" />
             <SidebarLink to="/lecturer/assignments" icon={<FileText size={20} />} text="Assignments" />

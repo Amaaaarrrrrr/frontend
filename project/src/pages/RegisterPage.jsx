@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import Input from '../components/common/Input';
-import Button from '../components/common/Button';
 import { GraduationCap, Mail, Lock, AlertCircle, User, Phone, BookOpen } from 'lucide-react';
 import axios from 'axios';
+import Input from '../components/common/Input';
+import Button from '../components/common/Button';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -40,19 +39,13 @@ const RegisterPage = () => {
       const response = await axios.post('http://127.0.0.1:5000/api/register', dataToSubmit);
 
       if (response.status === 201) {
-        // After successful registration, login the user
-        const loginResponse = await axios.post('http://127.0.0.1:5000/api/login', {
-          email,
-          password,
-        });
-
-        if (loginResponse.status === 200) {
-          localStorage.setItem('token', loginResponse.data.access_token);
-          navigate(loginResponse.data.redirect_url);
-        }
+        //  redirect to login page after successful registration
+        printf('Registration successful...');
+        navigate('/login');
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Error occurred during registration. Please try again.');
+    } finally {
       setIsLoading(false);
     }
   };
@@ -132,123 +125,112 @@ const RegisterPage = () => {
               <div className="mb-5">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Register as</label>
                 <div className="grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setRole('student')}
-                    className={`p-3 rounded-lg border transition-colors ${role === 'student' ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    Student
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole('lecturer')}
-                    className={`p-3 rounded-lg border transition-colors ${role === 'lecturer' ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    Lecturer
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setRole('admin')}
-                    className={`p-3 rounded-lg border transition-colors ${role === 'admin' ? 'bg-blue-50 border-blue-300 text-blue-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
-                  >
-                    Admin
-                  </button>
+                  {['student', 'lecturer', 'admin'].map((r) => (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setRole(r)}
+                      className={`p-3 rounded-lg border transition-colors ${
+                        role === r
+                          ? 'bg-blue-50 border-blue-300 text-blue-700'
+                          : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      {r.charAt(0).toUpperCase() + r.slice(1)}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* Role-specific profile fields */}
+              {/* Role-specific fields */}
               {role === 'student' && (
-                <div className="mb-4">
-                  <Input
-                    label="Registration Number"
-                    type="text"
-                    name="reg_no"
-                    value={profileData.reg_no || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your registration number"
-                    required
-                    icon={<BookOpen className="h-5 w-5 text-gray-400" />}
-                  />
-                </div>
-              )}
-              {role === 'student' && (
-                <div className="mb-4">
-                  <Input
-                    label="Program"
-                    type="text"
-                    name="program"
-                    value={profileData.program || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your program"
-                    required
-                  />
-                </div>
-              )}
-              {role === 'student' && (
-                <div className="mb-4">
-                  <Input
-                    label="Year of Study"
-                    type="text"
-                    name="year_of_study"
-                    value={profileData.year_of_study || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your year of study"
-                    required
-                  />
-                </div>
-              )}
-              {role === 'student' && (
-                <div className="mb-4">
-                  <Input
-                    label="Phone Number"
-                    type="text"
-                    name="phone"
-                    value={profileData.phone || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your phone number"
-                    required
-                  />
-                </div>
+                <>
+                  <div className="mb-4">
+                    <Input
+                      label="Registration Number"
+                      type="text"
+                      name="reg_no"
+                      value={profileData.reg_no || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your registration number"
+                      required
+                      icon={<BookOpen className="h-5 w-5 text-gray-400" />}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <Input
+                      label="Program"
+                      type="text"
+                      name="program"
+                      value={profileData.program || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your program"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <Input
+                      label="Year of Study"
+                      type="text"
+                      name="year_of_study"
+                      value={profileData.year_of_study || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your year of study"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <Input
+                      label="Phone Number"
+                      type="text"
+                      name="phone"
+                      value={profileData.phone || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your phone number"
+                      required
+                      icon={<Phone className="h-5 w-5 text-gray-400" />}
+                    />
+                  </div>
+                </>
               )}
 
               {role === 'lecturer' && (
-                <div className="mb-4">
-                  <Input
-                    label="Staff Number"
-                    type="text"
-                    name="staff_no"
-                    value={profileData.staff_no || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your staff number"
-                    required
-                  />
-                </div>
-              )}
-              {role === 'lecturer' && (
-                <div className="mb-4">
-                  <Input
-                    label="Department"
-                    type="text"
-                    name="department"
-                    value={profileData.department || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your department"
-                    required
-                  />
-                </div>
-              )}
-              {role === 'lecturer' && (
-                <div className="mb-4">
-                  <Input
-                    label="Phone Number"
-                    type="text"
-                    name="phone"
-                    value={profileData.phone || ''}
-                    onChange={handleProfileInputChange}
-                    placeholder="Enter your phone number"
-                    required
-                  />
-                </div>
+                <>
+                  <div className="mb-4">
+                    <Input
+                      label="Staff Number"
+                      type="text"
+                      name="staff_no"
+                      value={profileData.staff_no || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your staff number"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <Input
+                      label="Department"
+                      type="text"
+                      name="department"
+                      value={profileData.department || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your department"
+                      required
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <Input
+                      label="Phone Number"
+                      type="text"
+                      name="phone"
+                      value={profileData.phone || ''}
+                      onChange={handleProfileInputChange}
+                      placeholder="Enter your phone number"
+                      required
+                      icon={<Phone className="h-5 w-5 text-gray-400" />}
+                    />
+                  </div>
+                </>
               )}
 
               <Button type="submit" variant="primary" fullWidth disabled={isLoading} className="py-3">
@@ -272,7 +254,7 @@ const RegisterPage = () => {
               © 2025 University Student Portal. All rights reserved.
             </p>
             <p className="text-xs text-center text-gray-600 mt-2">
-              <span>Do you have an account? </span>
+              <span>Already have an account? </span>
               <a href="/login" className="text-blue-600 hover:text-blue-800">
                 Login here
               </a>

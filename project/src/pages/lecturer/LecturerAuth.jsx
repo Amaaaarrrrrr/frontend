@@ -10,10 +10,13 @@ function LecturerAuth() {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
+  // Retrieve token from localStorage using 'access-token' key
+  const token = localStorage.getItem('access-token');
+
   useEffect(() => {
     axios
       .get('/api/profile', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${token}` }, // using access-token here
       })
       .then((response) => {
         setProfile({ name: response.data.name, email: response.data.email });
@@ -24,7 +27,7 @@ function LecturerAuth() {
         setLoading(false);
         setMessage('Failed to load profile.');
       });
-  }, []);
+  }, [token]); // dependency added to re-run if token changes
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +43,7 @@ function LecturerAuth() {
       .put(
         '/api/profile',
         { ...profile, password: password || undefined },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        { headers: { Authorization: `Bearer ${token}` } } // using access-token here
       )
       .then(() => setMessage('Profile updated successfully.'))
       .catch((err) => {
@@ -51,7 +54,7 @@ function LecturerAuth() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('access-token'); // remove access-token
     navigate('/login');
   };
 
@@ -62,10 +65,10 @@ function LecturerAuth() {
 
     axios
       .delete('/api/profile', {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        headers: { Authorization: `Bearer ${token}` }, // using access-token here
       })
       .then(() => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('access-token'); // remove access-token
         alert('Account deleted successfully.');
         navigate('/register');
       })
