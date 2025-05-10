@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Loader } from 'lucide-react';
 
-const UnitRegistration= () => {
+const UnitRegistrationForm = () => {
   const [courseCode, setCourseCode] = useState('');
   const [semesterId, setSemesterId] = useState('');
   const [courses, setCourses] = useState([]);
@@ -29,52 +29,84 @@ const UnitRegistration= () => {
     };
 
     fetchCoursesAndSemesters();
+    fetchRegistrations(); // Load current registrations
   }, []);
+
+  const fetchRegistrations = async () => {
+    try {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+
+      const response = await axios.get('http://127.0.0.1:5000/api/registration', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setRegistrations(response.data);
+    } catch (err) {
+      console.error('Failed to fetch registrations', err);
+    }
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+    setError('');
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setError('User is not logged in');
+      setLoading(false);
+      return;
+    }
+
     try {
-      // Get the token from localStorage (or wherever it's stored)
-      const token = localStorage.getItem('accessToken');
-      
-      if (!token) {
-        setError('User is not logged in');
-        return;
-      }
-  
       const response = await axios.post(
-        'http://127.0.0.1:5000/api/registration', 
+        'http://127.0.0.1:5000/api/registration',
         {
           course_code: courseCode,
           semester_id: semesterId,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Send token in Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-      
+
       toast.success('Registration successful!');
       setCourseCode('');
       setSemesterId('');
-      setRegistrations((prev) => [...prev, response.data]);
+      setRegistrations((prev) => [...prev, {
+        id: response.data.registration_id,
+        course_code: courseCode,
+        course_title: courses.find(c => c.code === courseCode)?.title || '',
+        semester_id: semesterId,
+        registered_on: new Date().toISOString()
+      }]);
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
     } finally {
       setLoading(false);
     }
   };
-  
 
   const handleDeleteRegistration = async (registrationId) => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      setError('User is not logged in');
+      return;
+    }
+
     try {
       setLoading(true);
       await axios.delete('http://127.0.0.1:5000/api/registration', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         data: { registration_id: registrationId },
       });
+
       setRegistrations(registrations.filter((reg) => reg.id !== registrationId));
       toast.success('Registration deleted successfully!');
     } catch (err) {
@@ -172,4 +204,4 @@ const UnitRegistration= () => {
   );
 };
 
-export default UnitRegistration;
+export default UnitRegistrationForm;
