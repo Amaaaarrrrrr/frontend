@@ -100,7 +100,7 @@ const StudentRegistrationApproval = () => {
         </div>
       ) : pendingRegistrations.length === 0 ? (
         <div className="text-center py-8 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No pending registrations</p>
+          <p className="text-gray-500">No pending registrations.</p>
         </div>
       ) : (
         <div className="space-y-4">
