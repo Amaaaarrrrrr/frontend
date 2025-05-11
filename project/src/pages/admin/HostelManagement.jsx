@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Form, Input, Select, message, Tabs, Card, Tag, Spin } from 'antd';
-
+import axios from 'axios';
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -9,25 +9,26 @@ const HostelManagement = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [bookingModalVisible, setBookingModalVisible] = useState(false);
-  const [form] = Form.useForm();
+  const [addHostelVisible, setAddHostelVisible] = useState(false);
+  const [addRoomVisible, setAddRoomVisible] = useState(false);
 
-  // Fetch data from API
+  const [form] = Form.useForm();
+  const [hostelForm] = Form.useForm();
+  const [roomForm] = Form.useForm();
+
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [hostelsResponse, roomsResponse] = await Promise.all([
+      const [hostelsRes, roomsRes] = await Promise.all([
         fetch('http://127.0.0.1:5000/api/hostels'),
         fetch('http://127.0.0.1:5000/api/rooms')
       ]);
 
-      if (!hostelsResponse.ok || !roomsResponse.ok) {
-        throw new Error('Failed to fetch data');
-      }
+      if (!hostelsRes.ok || !roomsRes.ok) throw new Error('Failed to fetch data');
 
-      const hostelsData = await hostelsResponse.json();
-      const roomsData = await roomsResponse.json();
+      const hostelsData = await hostelsRes.json();
+      const roomsData = await roomsRes.json();
 
-      // Ensure we have arrays even if the response structure is different
       setHostels(Array.isArray(hostelsData?.hostels) ? hostelsData.hostels : []);
       setRooms(Array.isArray(roomsData?.rooms) ? roomsData.rooms : []);
 
@@ -42,26 +43,54 @@ const HostelManagement = () => {
     fetchData();
   }, []);
 
-  const handleBookingSubmit = async (values) => {
+  const handleAddHostelSubmit = async (values) => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+      const res = await axios.post('http://127.0.0.1:5000/api/hostels', {
+        // method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values),
       });
+      if (!res.ok) throw new Error('Failed to add hostel');
+      message.success('Hostel added');
+      setAddHostelVisible(false);
+      hostelForm.resetFields();
+      fetchData();
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
 
-      if (!response.ok) {
-        throw new Error('Booking failed');
-      }
+  const handleAddRoomSubmit = async (values) => {
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/api/rooms', {
+        // method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) throw new Error('Failed to add room');
+      message.success('Room added');
+      setAddRoomVisible(false);
+      roomForm.resetFields();
+      fetchData();
+    } catch (err) {
+      message.error(err.message);
+    }
+  };
 
-      message.success('Booking created successfully');
+  const handleBookingSubmit = async (values) => {
+    try {
+      const res = await axios.post('http://127.0.0.1:5000/api/bookings', {
+        // method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values),
+      });
+      if (!res.ok) throw new Error('Booking failed');
+      message.success('Booking created');
       setBookingModalVisible(false);
       form.resetFields();
-      fetchData(); // Refresh data
-    } catch (error) {
-      message.error(error.message);
+      fetchData();
+    } catch (err) {
+      message.error(err.message);
     }
   };
 
@@ -115,38 +144,26 @@ const HostelManagement = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Hostel Management</h1>
-      
+
       <Tabs defaultActiveKey="hostels">
         <TabPane tab="Hostels" key="hostels">
           <Card 
             title="Hostel List" 
-            extra={<Button type="primary">Add Hostel</Button>}
+            extra={<Button type="primary" onClick={() => setAddHostelVisible(true)}>Add Hostel</Button>}
           >
-            <Table 
-              columns={hostelColumns} 
-              dataSource={hostels}
-              rowKey="id"
-              loading={loading}
-              locale={{
-                emptyText: loading ? <Spin /> : 'No hostels found'
-              }}
+            <Table columns={hostelColumns} dataSource={hostels} rowKey="id" loading={loading}
+              locale={{ emptyText: loading ? <Spin /> : 'No hostels found' }}
             />
           </Card>
         </TabPane>
 
         <TabPane tab="Rooms" key="rooms">
           <Card 
-            title="Room Management"
-            extra={<Button type="primary">Add Room</Button>}
+            title="Room Management" 
+            extra={<Button type="primary" onClick={() => setAddRoomVisible(true)}>Add Room</Button>}
           >
-            <Table 
-              columns={roomColumns} 
-              dataSource={rooms}
-              rowKey="id"
-              loading={loading}
-              locale={{
-                emptyText: loading ? <Spin /> : 'No rooms found'
-              }}
+            <Table columns={roomColumns} dataSource={rooms} rowKey="id" loading={loading}
+              locale={{ emptyText: loading ? <Spin /> : 'No rooms found' }}
             />
           </Card>
         </TabPane>
@@ -154,32 +171,15 @@ const HostelManagement = () => {
         <TabPane tab="Bookings" key="bookings">
           <Card 
             title="Booking Management"
-            extra={
-              <Button 
-                type="primary" 
-                onClick={() => setBookingModalVisible(true)}
-              >
-                Create Booking
-              </Button>
-            }
+            // extra={<Button type="primary" onClick={() => setBookingModalVisible(true)}>Create Booking</Button>}
           >
-            <Table 
-              columns={[
-                { title: 'Student ID', dataIndex: 'student_id', key: 'student_id' },
-                { title: 'Room', dataIndex: 'room_id', key: 'room_id' },
-                { 
-                  title: 'Status', 
-                  dataIndex: 'status', 
-                  key: 'status',
-                  render: renderStatus
-                },
-              ]}
-              dataSource={[]} // Empty until you implement bookings
-              rowKey="id"
-              loading={loading}
-              locale={{
-                emptyText: loading ? <Spin /> : 'No bookings found'
-              }}
+            <Table columns={[
+              { title: 'Student ID', dataIndex: 'student_id', key: 'student_id' },
+              { title: 'Room', dataIndex: 'room_id', key: 'room_id' },
+              { title: 'Status', dataIndex: 'status', key: 'status', render: renderStatus }
+            ]}
+              dataSource={[]} rowKey="id" loading={loading}
+              locale={{ emptyText: loading ? <Spin /> : 'No bookings found' }}
             />
           </Card>
         </TabPane>
@@ -188,7 +188,7 @@ const HostelManagement = () => {
       {/* Booking Modal */}
       <Modal
         title="Create Booking"
-        visible={bookingModalVisible}
+        open={bookingModalVisible}
         onCancel={() => setBookingModalVisible(false)}
         onOk={() => form.submit()}
       >
@@ -196,24 +196,69 @@ const HostelManagement = () => {
           <Form.Item name="student_id" label="Student ID" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-
           <Form.Item name="hostel_id" label="Hostel" rules={[{ required: true }]}>
             <Select placeholder="Select hostel">
-              {hostels.map(hostel => (
-                <Option key={hostel.id} value={hostel.id}>
-                  {hostel.name}
+              {hostels.map(h => <Option key={h.id} value={h.id}>{h.name}</Option>)}
+            </Select>
+          </Form.Item>
+          <Form.Item name="room_id" label="Room" rules={[{ required: true }]}>
+            <Select placeholder="Select room">
+              {rooms.map(r => (
+                <Option key={r.id} value={r.id}>
+                  {r.room_number} (Capacity: {r.capacity})
                 </Option>
               ))}
             </Select>
           </Form.Item>
+        </Form>
+      </Modal>
 
-          <Form.Item name="room_id" label="Room" rules={[{ required: true }]}>
-            <Select placeholder="Select room">
-              {rooms.map(room => (
-                <Option key={room.id} value={room.id}>
-                  {room.room_number} (Capacity: {room.capacity})
-                </Option>
-              ))}
+      {/* Add Hostel Modal */}
+      <Modal
+        title="Add Hostel"
+        open={addHostelVisible}
+        onCancel={() => setAddHostelVisible(false)}
+        onOk={() => hostelForm.submit()}
+      >
+        <Form form={hostelForm} layout="vertical" onFinish={handleAddHostelSubmit}>
+          <Form.Item name="name" label="Hostel Name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="location" label="Location" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+            <Select>
+              <Option value="active">Active</Option>
+              <Option value="inactive">Inactive</Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      {/* Add Room Modal */}
+      <Modal
+        title="Add Room"
+        open={addRoomVisible}
+        onCancel={() => setAddRoomVisible(false)}
+        onOk={() => roomForm.submit()}
+      >
+        <Form form={roomForm} layout="vertical" onFinish={handleAddRoomSubmit}>
+          <Form.Item name="room_number" label="Room Number" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="capacity" label="Capacity" rules={[{ required: true }]}>
+            <Input type="number" />
+          </Form.Item>
+          <Form.Item name="hostel_id" label="Hostel" rules={[{ required: true }]}>
+            <Select placeholder="Select hostel">
+              {hostels.map(h => <Option key={h.id} value={h.id}>{h.name}</Option>)}
+            </Select>
+          </Form.Item>
+          <Form.Item name="status" label="Status" rules={[{ required: true }]}>
+            <Select>
+              <Option value="available">Available</Option>
+              <Option value="occupied">Occupied</Option>
             </Select>
           </Form.Item>
         </Form>

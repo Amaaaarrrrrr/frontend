@@ -11,6 +11,8 @@ import RegisterPage from './pages/RegisterPage';
 import CoursePage from './pages/CoursePage';
 import UnitRegistrationForm from './forms/UnitRegistrationForm';
 import NotFoundPage from './pages/NotFoundPage';
+import AboutPage from './pages/AboutPage';
+import ContactPage from './pages/ContactPage';
 
 // Student pages
 import StudentLayout from './layouts/StudentLayout';
@@ -55,6 +57,9 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/courses" element={<CoursePage />} />
             <Route path="/registration" element={<UnitRegistrationForm />} />
+            <Route path="/home" element={<HomePage/>} />
+            <Route path='/about' element={<AboutPage/>}/>
+            <Route path='/contact' element={<ContactPage/>}/>
 
             {/* Student routes */}
             <Route

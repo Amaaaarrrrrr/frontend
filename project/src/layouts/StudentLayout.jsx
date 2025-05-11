@@ -53,12 +53,12 @@ const StudentLayout = () => {
         <div className="flex flex-col justify-between h-full p-4 overflow-y-auto">
           <div className="space-y-1">
             <SidebarLink to="/student/dashboard" icon={<Gauge size={20} />} text="Dashboard" />
-            <SidebarLink to="/student/courses" icon={<BookOpen size={20} />} text="My Courses" />
+            <SidebarLink to="/student/courses" icon={<BookOpen size={20} />} text="Courses Available" />
             <SidebarLink to="/student/register-units" icon={<ClipboardList size={20} />} text="Register Units" />
             <SidebarLink to="/student/fees" icon={<DollarSign size={20} />} text="Fees & Payments" />
             <SidebarLink to="/student/hostel" icon={<Home size={20} />} text="Hostel Booking" />
             <SidebarLink to="/student/documents" icon={<FileText size={20} />} text="Documents" />
-            <SidebarLink to="/student/auth" icon={<UserCircle size={20} />} text="My Profile" />
+            {/* <SidebarLink to="/student/auth" icon={<UserCircle size={20} />} text="My Profile" /> */}
           </div>
           
           <button 

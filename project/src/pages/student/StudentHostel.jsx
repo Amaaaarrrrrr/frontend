@@ -141,15 +141,17 @@ const StudentHostel = () => {
         <ol className="list-disc pl-5 text-gray-700 space-y-2">
           {rooms.map(room => (
             <li key={room.id}>
-              <strong>Room {room.room_number}</strong> - {room.bed_count} beds - ${room.price_per_bed.toFixed(2)} per bed -
-              <span
-                className={`ml-2 inline-block ${room.status === 'booked'
-                  ? 'bg-red-100 text-red-600'
-                  : 'bg-green-100 text-green-600'} font-semibold px-2 py-1 rounded-full`}
-              >
-                Status: {room.status}
-              </span>
-            </li>
+            <strong>Room {room.room_number}</strong> - {room.bed_count} beds - 
+            ${room.price_per_bed ? room.price_per_bed.toFixed(2) : 'N/A'} per bed -
+            <span
+              className={`ml-2 inline-block ${
+                room.status === 'booked' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+              } font-semibold px-2 py-1 rounded-full`}
+            >
+              Status: {room.status}
+            </span>
+          </li>
+          
           ))}
         </ol>
       </Card>

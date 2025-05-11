@@ -4,6 +4,8 @@ import { GraduationCap, Mail, Lock, AlertCircle, User, Phone, BookOpen } from 'l
 import axios from 'axios';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import Navbar from '../layouts/Navbar';
+import Footer from '../layouts/Footer';
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -44,7 +46,7 @@ const RegisterPage = () => {
         navigate('/login');
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Error occurred during registration. Please try again.');
+      setError(err.response?.data?.error);
     } finally {
       setIsLoading(false);
     }
@@ -55,6 +57,8 @@ const RegisterPage = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl shadow-xl overflow-hidden">
@@ -124,8 +128,8 @@ const RegisterPage = () => {
               {/* Role selection */}
               <div className="mb-5">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Register as</label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['student', 'lecturer', 'admin'].map((r) => (
+                <div className="grid grid-cols-2 gap-2">
+                  {['student', 'lecturer'].map((r) => (
                     <button
                       key={r}
                       type="button"
@@ -263,6 +267,8 @@ const RegisterPage = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

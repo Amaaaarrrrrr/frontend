@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import { Mail, Lock, AlertCircle } from 'lucide-react';
+import Navbar from '../layouts/Navbar';
+import Footer from '../layouts/Footer';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -67,6 +69,8 @@ const LoginPage = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl shadow-xl overflow-hidden">
@@ -200,6 +204,8 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
