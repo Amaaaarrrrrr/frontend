@@ -96,7 +96,7 @@ const LecturerAnnouncements = () => {
       padding: '20px',
       fontFamily: 'Arial, sans-serif',
     }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Lecturer Announcements</h2>
+      <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Admin Announcements</h2>
 
       <form onSubmit={handleSubmit} style={{
         display: 'flex',
