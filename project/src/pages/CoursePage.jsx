@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BookOpen, Loader, Search, XCircle } from 'lucide-react';
+import Navbar from '../layouts/Navbar';
+import Footer from '../layouts/Footer';
+
 
 const CoursePage = () => {
   const [courses, setCourses] = useState([]);
@@ -54,6 +57,8 @@ const CoursePage = () => {
   }, [searchTerm, selectedProgram, courses]);
 
   return (
+    <>
+    <Navbar />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-3xl font-bold text-center text-blue-800 mb-8">
@@ -144,6 +149,9 @@ const CoursePage = () => {
         )}
       </div>
     </div>
+    <Footer />
+    </>
+    
   );
 };
 

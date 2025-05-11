@@ -4,6 +4,9 @@ import { GraduationCap, Mail, Lock, AlertCircle, User, Phone, BookOpen } from 'l
 import axios from 'axios';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
+import Navbar from '../layouts/Navbar';
+import Footer from '../layouts/Footer';
+
 
 const RegisterPage = () => {
   const [name, setName] = useState('');
@@ -54,7 +57,11 @@ const RegisterPage = () => {
   };
 
   return (
+    <>
+    <Navbar/>
+    
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+     
       <div className="w-full max-w-md">
         <div className="bg-white rounded-xl shadow-xl overflow-hidden">
           <div className="p-6 bg-blue-600 text-white text-center">
@@ -227,9 +234,6 @@ const RegisterPage = () => {
           </div>
 
           <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-            <p className="text-xs text-center text-gray-600">
-              © 2025 University Student Portal. All rights reserved.
-            </p>
             <p className="text-xs text-center text-gray-600 mt-2">
               <span>Do you have an account? </span>
               <a href="/login" className="text-blue-600 hover:text-blue-800">
@@ -240,6 +244,8 @@ const RegisterPage = () => {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 

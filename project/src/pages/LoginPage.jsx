@@ -4,6 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import { GraduationCap, Mail, Lock, AlertCircle } from 'lucide-react';
+import Navbar from '../layouts/Navbar';
+import Footer from '../layouts/Footer';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -44,30 +46,9 @@ const LoginPage = () => {
   };
 
   return (
+    <>
+    <Navbar/>
     <div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-blue-50 to-indigo-100">
-      {/* Navbar/Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <div className="flex items-center">
-              <GraduationCap className="h-8 w-8 text-blue-600" />
-              <h1 className="ml-2 text-xl font-bold text-gray-900">University Portal</h1>
-            </div>
-
-            <nav className="hidden md:flex space-x-8">
-              <a href="/courses" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                Courses
-              </a>
-              <a href="#about" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                About
-              </a>
-              <a href="#contact" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                Contact
-              </a>
-            </nav>
-          </div>
-        </div>
-      </header>
 
       <div className="flex-grow flex items-center justify-center p-4">
         <div className="w-full max-w-md">
@@ -186,85 +167,9 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-7xl mx-auto px-4 grid gap-10 md:grid-cols-4">
-          <div>
-            <div className="flex items-center mb-4">
-              <GraduationCap className="h-8 w-8 text-blue-400" />
-              <span className="ml-2 text-xl font-bold text-white">University Portal</span>
-            </div>
-            <p className="text-gray-400">
-              Empowering students with tools for academic success and campus engagement.
-            </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-white">
-                <span className="sr-only">Facebook</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  {/* Facebook Icon */}
-                </svg>
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <span className="sr-only">Twitter</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  {/* Twitter Icon */}
-                </svg>
-              </a>
-              <a href="#" className="text-gray-300 hover:text-white">
-                <span className="sr-only">Instagram</span>
-                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                  {/* Instagram Icon */}
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-white text-sm font-semibold mb-3">Quick Links</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-white">Academic Calendar</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Library Resources</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Campus Map</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Career Services</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">IT Help Desk</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-gray-300 hover:text-white">Student Handbook</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Academic Policies</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Financial Aid</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Health Services</a></li>
-              <li><a href="#" className="text-gray-300 hover:text-white">Campus Events</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Stay Connected</h3>
-            <p className="text-gray-300 mb-4">Subscribe to our newsletter for updates on campus events and important announcements.</p>
-            <form className="flex">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="px-3 py-2 bg-gray-700 text-white placeholder-gray-400 rounded-l-md focus:outline-none focus:ring-1 focus:ring-blue-500 flex-grow"
-              />
-              <button
-                type="button"
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-md transition-colors"
-              >
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </div>
-
-        <div className="mt-8 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} University Portal. All rights reserved.
-        </div>
-      </footer>
     </div>
+    <Footer/>
+    </>
   );
 };
 
