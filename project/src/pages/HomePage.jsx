@@ -54,10 +54,7 @@ const HomePage = () => {
             <nav className="hidden md:flex space-x-8">
               <a href="/courses" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 Courses
-              </a>
-              <a href="#features" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
-                Features
-              </a>
+                </a>
               <a href="#about" className="text-gray-700 hover:text-blue-600 px-3 py-2 text-sm font-medium">
                 About
               </a>
